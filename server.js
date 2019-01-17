@@ -19,27 +19,26 @@ http.listen(port, hostname, () => {
 
 const axios = require("axios");
 
-const makeOCPURequest = (req, res) => {
-  console.log(req.body);
-  axios
-    .post("http://localhost/ocpu/library/garchR/R/highlowplot", {
-      ticker: req.body.ticker
-    })
-    .then(rest => processOCPU(rest.data, res))
-    .catch(err => {
-      console.log(err);
-    });
-};
+// const makeOCPURequest = (req, res) => {
+//   console.log(req.body);
+//   axios
+//     .post("http://localhost/ocpu/library/garchR/R/gbmgarch", {
+//       ticker: req.body.ticker
+//     })
+//     .then(rest => processOCPU(rest.data, res))
+//     .catch(err => {
+//       console.log(err);
+//     });
+// };
 
-const processOCPU = (req, res) => {
-  console.log(req);
-  let tempArr = req.split(/\n/);
-  tempArr = tempArr[0].split("/");
-  let tempKey = tempArr[3];
-  res.send({ image: `http://localhost/ocpu/tmp/${tempKey}/graphics/1` });
-  //  getGraphics(tempKey,res);
-};
+// const processOCPU = (req, res) => {
+//   console.log(req);
+//   let tempArr = req.split(/\n/);
+//   tempArr = tempArr[0].split("/");
+//   let tempKey = tempArr[3];
+//   res.send({ image: `http://localhost/ocpu/tmp/${tempKey}/graphics/1` });
+// };
 
-app.post("/home", makeOCPURequest);
-console.log(new Date(Date.now()))
-//makeOCPURequest('GE')
+// app.post("/home", makeOCPURequest);
+
+
