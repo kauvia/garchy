@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import Home from "./components/home";
+//import AuthenticatedComponents from "./components/auth";
 import Landing from "./components/landing";
+import AuthedContainer from "./components/authenticatedComponents";
 import { Route, Switch } from "react-router-dom";
 import Particles from "./particles";
-import './App.css';
-
-
+import "./App.css";
 
 class App extends Component {
   constructor(props) {
@@ -20,7 +19,6 @@ class App extends Component {
       this.setState({ isLoggedIn: true });
       this.setState({ token: localStorage.getItem("token") });
 
-      console.log("fetching");
       fetch("/validate", {
         method: "GET",
         headers: {
@@ -29,10 +27,10 @@ class App extends Component {
         }
       }).then(res =>
         res.json().then(res => {
-          console.log(res);
+          //    console.log(res);
 
           if (!res.success) {
-            console.log(res);
+            //       console.log(res);
             localStorage.clear();
           }
         })
@@ -41,13 +39,16 @@ class App extends Component {
   }
   render() {
     return (
-      <div style={{height: "100%"}}>
-        <Particles/>
+      <div className="container-fluid">
+        <Particles />
 
         <Switch>
           <Route exact path="/login" component={Landing} />
           <Route exact path="/logout" component={Landing} />
-          <Route component={Home} />
+          <Route
+            path="/"
+            render={props => <AuthedContainer {...props} />}
+          />
         </Switch>
       </div>
     );

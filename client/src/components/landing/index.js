@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Home from "../home";
 import { Redirect } from "react-router-dom";
 
 class Landing extends Component {
@@ -104,7 +103,7 @@ class Landing extends Component {
   }
   render() {
     if (this.state.isLoggedIn) {
-      return <Redirect to="/home" />;
+      return <Redirect to="/" />;
     } else {
       return (
         <div

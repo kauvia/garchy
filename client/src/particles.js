@@ -3,10 +3,10 @@ import Particles from "react-particles-js";
 const particleOptions = {
   particles: {
     number: {
-      value: 150,
+      value: 50,
       density: {
         enable: true,
-        value_area: 800
+        value_area: 1000
       }
     }
   }

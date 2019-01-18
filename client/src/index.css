@@ -2,17 +2,23 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  height: 100vh;
+  color: antiquewhite;
+  width:100vw;
+  height:100vh;
 }
 
 .background {
   background-image: linear-gradient(
-    to right,
+    to top,
     #040837,
     #002049,
     #003458,
     #004862,
     #105b6b
   );
-  height: 100vh;
+}
+
+#root{
+  /* width:100%;
+  height:100%; */
 }
