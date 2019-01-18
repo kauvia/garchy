@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Navbar } from "./nav";
-import Main from "./main";
+import StockProfile from "./stockprofile";
 import Splash from "./splash";
 
 class AuthedContainer extends Component {
@@ -42,8 +42,9 @@ class AuthedContainer extends Component {
     }).then(res =>
       res.json().then(res => {
         if (res.success === true) {
-          console.log("successly got stock info", this.state);
-          this.setState({ stockData: res.stockdata });
+          this.setState({stockData:res.stockdata})
+          console.log("successly got stock info");
+          console.log(this.state)
         }
       })
     );
@@ -86,7 +87,7 @@ class AuthedContainer extends Component {
           </Navbar>
           <div className="container-fluid">
           
-            {stockPresent && <Main stock={this.state.stockData} />}
+            {stockPresent && <StockProfile stock={this.state.stockData} />}
             {!stockPresent && <Splash />}
           </div>
         </div>

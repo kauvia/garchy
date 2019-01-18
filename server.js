@@ -18,6 +18,63 @@ http.listen(port, hostname, () => {
 });
 
 const axios = require("axios");
+const fs = require("fs");
+const jsonfile = require("jsonfile");
+const stockArr = { stocks: [] };
+
+const getStockInfo = () => {
+  axios.get("https://api.iextrading.com/1.0/ref-data/symbols").then(val => {
+    val.data.map(stock => {
+      if (stock.type == "cs" && stock.isEnabled) {
+        stockArr.stocks.push(stock);
+      }
+    });
+    console.log(stockArr.stocks.length);
+  });
+};
+
+//getStockInfo();
+
+const writeStockInfo = () => {
+  jsonfile.readFile("stocks.json", (err, data) => {
+    jsonfile.writeFile("stocks.json", stockArr).then(res => {
+      console.log("finished writing");
+      jsonfile.readFile("stocks.json", (err, data) => {
+        console.log(data.length);
+      });
+    });
+  });
+};
+
+const {Stocks} =require("./server/controllers");
+const runUpload = ()=>{
+  console.log('uploading')
+  jsonfile.readFile("stocks.json",(err,data)=>{
+    let stockArr = data.stocks;
+    console.log(stockArr.length)
+  //  Stocks.uploadStocks(stockArr)  //JUST IN CASE
+  })
+}
+
+const seeStocks = ()=>{
+  console.log('seeing all stocks')
+}
+
+//seeStocks();
+//runUpload()                //DONT RUN UNLESS STOCKDATABASE IS EMPTY
+// jsonfile.readFile("stocks.json",(err,obj)=>{
+//   console.log(obj.stocks.length);
+//   obj.stocks.map(val=>{
+//     obj.stocks.map(inner=>{
+//       if (val.symbol==inner.symbol){
+//         if (val.name!=inner.name){
+//           console.log('same symbol but diffenrent companies',val,inner)
+//         }
+//       }
+//     });console.log('searching')
+//   });console.log('end of search')
+// })
+
 
 // const makeOCPURequest = (req, res) => {
 //   console.log(req.body);
@@ -40,5 +97,3 @@ const axios = require("axios");
 // };
 
 // app.post("/home", makeOCPURequest);
-
-

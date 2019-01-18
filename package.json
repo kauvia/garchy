@@ -25,6 +25,7 @@
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "jsonfile": "^5.0.0",
     "jsonwebtoken": "^8.4.0",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",

@@ -1,19 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const Stock = sequelize.define('Stock', {
     id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    name: DataTypes.STRING,
-    password: DataTypes.STRING,
+    symbol: DataTypes.STRING,
+    name: DataTypes.STRING
   }, {});
-  User.associate = function(models) {
-    User.belongsToMany(models.Stock,{
+  Stock.associate = function(models) {
+    Stock.belongsToMany(models.User,{
       through: models.Watchlist,
-      as:'user',    })
-  };
-  return User;
+      as:'stock',
+    })  };
+  return Stock;
 };
