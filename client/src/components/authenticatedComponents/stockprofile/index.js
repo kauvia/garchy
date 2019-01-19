@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-//import Header from "./header";
+import { Link } from "react-router-dom";
+
+import { Chart } from "./chart";
+import { Sentiment } from "./sentiment";
+import { Stats } from "./stats";
 
 class StockProfile extends Component {
   constructor(props) {
@@ -9,18 +13,44 @@ class StockProfile extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount() {}
-  handleChange(e) {
-  }
+  handleChange(e) {}
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
   }
   render() {
-    console.log(this.props)
+    console.log(this.props);
     return (
       <div className="innerscreen" id="stock-profile-container">
-        <div className="row">
-          <div className="col">{this.props.stock.name}</div>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col">
+              <h3 className="d-inline-block text-left">
+                <a href={this.props.stock.website}>{this.props.stock.companyName}</a>
+              </h3>
+              <p className="d-inline-block float-right align-text-bottom">
+                {this.props.stock.exchange}
+              </p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-6">
+              <Chart data={this.props.stock.forecastURL} />
+            </div>
+            <div className="col-6">
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col">
+                    <Stats data={this.props.stock} />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <Sentiment data={this.props.stock.sentiments} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

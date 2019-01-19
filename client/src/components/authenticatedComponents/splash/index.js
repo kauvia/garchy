@@ -9,9 +9,7 @@ class Splash extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount() {}
-  handleChange(e) {
-    let target = e.target;
-  }
+  handleChange(e) {}
   handleSubmit(e) {
     e.preventDefault();
   }

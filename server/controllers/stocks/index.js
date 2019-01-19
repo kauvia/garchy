@@ -30,22 +30,27 @@ class Stocks {
         .all([
           axios.get(`https://api.iextrading.com/1.0/stock/${symb}/company`),
           axios.get(`https://api.iextrading.com/1.0/stock/${symb}/financials`),
-          axios.post("http://localhost/ocpu/library/garchR/R/gbmgarch", {
-            ticker: symb
-          })
+          // axios.post("http://localhost/ocpu/library/garchR/R/gbmgarch", {
+          //   ticker: symb
+          // })
         ])
         .then(
           axios.spread((val1, val2, val3) => {
+            let stockData = val1.data;
             //processing OCPU data
 
-            let tempArr = val3.data.split(/\n/);
-            tempArr = tempArr[0].split('/');
-            let ocpuURL = `http://localhost/ocpu/tmp/${tempArr[3]}/graphics/1`
+            // let tempArr = val3.data.split(/\n/);
+            // tempArr = tempArr[0].split('/');
+            // let ocpuURL = `http://localhost/ocpu/tmp/${tempArr[3]}/graphics/1`
+
+            //Sentiments
+
+            stockData.sentiments ={twitter:0.200} //dummy?
 
             //the rest
-            let stockData = val1.data;
+
             stockData.financials = val2.data.financials;
-            stockData.forecastURL = ocpuURL;
+            stockData.forecastURL = "https://canvasjs.com/wp-content/uploads/images/gallery/php-charts/overview/php-charts-graphs-index-data-label.png";
             res.status(200).send({ success: true, stockdata: stockData });
           })
         );

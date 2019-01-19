@@ -18,7 +18,36 @@ class AuthedContainer extends Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
-  componentDidMount() {}
+  componentDidMount() {
+    let lastVisitedStock = localStorage.getItem("symbol");
+    if (lastVisitedStock) {
+      this.setState({ query: lastVisitedStock });
+      console.log(this.state,lastVisitedStock)
+      fetch("/search", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
+          "validate-only": false,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({query:lastVisitedStock})
+      }).then(res =>
+        res.json().then(res => {
+          if (res.success === true) {
+            this.setState({
+              stockData: res.stockdata,
+              loading: false,
+              splash: false
+            });
+            localStorage.setItem("symbol", res.stockdata.symbol);
+            //         console.log("successly got stock info");
+            //          console.log(this.state);
+          }
+        })
+      );
+    }
+  }
   handleLogout() {
     this.setState({ doRedirect: true });
     localStorage.clear();
@@ -36,7 +65,7 @@ class AuthedContainer extends Component {
         this.state.stockData.symbol.toLowerCase() !==
         this.state.query.toLowerCase()
       ) {
-        console.log("sending request");
+             console.log("sending request");
         this.setState({ loading: true });
         fetch("/search", {
           method: "POST",
@@ -55,14 +84,17 @@ class AuthedContainer extends Component {
                 loading: false,
                 splash: false
               });
-              console.log("successly got stock info");
-              console.log(this.state);
+              localStorage.setItem("symbol", res.stockdata.symbol);
+              //         console.log("successly got stock info");
+              //          console.log(this.state);
             }
           })
         );
       }
     }
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
   }
 
   render() {
@@ -88,10 +120,7 @@ class AuthedContainer extends Component {
                     aria-label="Search"
                   />
                   <div className="input-group-append">
-                    <button
-                      className="btn btn-outline-light"
-                      type="submit"
-                    >
+                    <button className="btn btn-outline-light" type="submit">
                       Search
                     </button>
                   </div>

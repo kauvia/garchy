@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 
-class Chart extends Component {
+class Sentiment extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-//this.props.data = chartURL
+// this.props.data = {twitter}
   handleChange() {}
   handleSubmit() {}
   render() {
-    return <div><img src={this.props.data} alt="chart" style={{width:'100%'}}/></div>;
+    let {twitter}= this.props.data
+    return <div>Sentiments<div>Twitter : {twitter}</div></div>;
   }
 }
 
-export default Chart;
+export default Sentiment;
