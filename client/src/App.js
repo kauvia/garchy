@@ -1,11 +1,16 @@
 import React, { Component } from "react";
-//import AuthenticatedComponents from "./components/auth";
+import { Route, Switch } from "react-router-dom";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
+
+
 import Landing from "./components/landing";
 import AuthedContainer from "./components/authenticatedComponents";
-import { Route, Switch } from "react-router-dom";
 import Particles from "./particles";
-import "./App.css";
 
+import "./App.css";
+library.add(faCog);
 class App extends Component {
   constructor(props) {
     super(props);
@@ -45,10 +50,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/login" component={Landing} />
           <Route exact path="/logout" component={Landing} />
-          <Route
-            path="/"
-            render={props => <AuthedContainer {...props} />}
-          />
+          <Route path="/" render={props => <AuthedContainer {...props} />} />
         </Switch>
       </div>
     );

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Navbar } from "./nav";
+import { Navbar, Loadscreen } from "./nav";
 import StockProfile from "./stockprofile";
 import Splash from "./splash";
 
@@ -11,7 +11,7 @@ class AuthedContainer extends Component {
       query: "",
       stockData: { symbol: "" },
       doRedirect: false,
-      currentLocation: ""
+      loading: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -30,35 +30,38 @@ class AuthedContainer extends Component {
   }
 
   handleSearch(e) {
-    if (
-      this.state.stockData.symbol.toLowerCase() !=
-      this.state.query.toLowerCase()
-    ) {
-      console.log("sending request");
-      fetch("/search", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
-          "validate-only": false,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(this.state)
-      }).then(res =>
-        res.json().then(res => {
-          if (res.success === true) {
-            this.setState({ stockData: res.stockdata });
-            console.log("successly got stock info");
-            console.log(this.state);
-          }
-        })
-      );
+    if (!this.state.loading) {
+      if (
+        this.state.stockData.symbol.toLowerCase() !==
+        this.state.query.toLowerCase()
+      ) {
+        console.log("sending request");
+        this.setState({ loading: true });
+        fetch("/search", {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
+            "validate-only": false,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(this.state)
+        }).then(res =>
+          res.json().then(res => {
+            if (res.success === true) {
+              this.setState({ stockData: res.stockdata, loading: false });
+              console.log("successly got stock info");
+              console.log(this.state);
+            }
+          })
+        );
+      }
     }
     e.preventDefault();
   }
 
   render() {
-    let stockPresent = Object.keys(this.state.stockData).length > 0;
+    let stockPresent = Object.keys(this.state.stockData).length > 0; // TODO change this!!
     if (this.state.doRedirect) {
       return <Redirect to="/logout" />;
     } else {
@@ -92,7 +95,11 @@ class AuthedContainer extends Component {
             }
           </Navbar>
           <div className="container-fluid">
-            {stockPresent && <StockProfile stock={this.state.stockData} />}
+            {this.state.loading ? (
+              <Loadscreen />
+            ) : (
+              stockPresent && <StockProfile stock={this.state.stockData} />
+            )}
             {!stockPresent && <Splash />}
           </div>
         </div>
