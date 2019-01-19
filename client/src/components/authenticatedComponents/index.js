@@ -11,7 +11,8 @@ class AuthedContainer extends Component {
       query: "",
       stockData: { symbol: "" },
       doRedirect: false,
-      loading: false
+      loading: false,
+      splash: true
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -49,7 +50,11 @@ class AuthedContainer extends Component {
         }).then(res =>
           res.json().then(res => {
             if (res.success === true) {
-              this.setState({ stockData: res.stockdata, loading: false });
+              this.setState({
+                stockData: res.stockdata,
+                loading: false,
+                splash: false
+              });
               console.log("successly got stock info");
               console.log(this.state);
             }
@@ -61,8 +66,8 @@ class AuthedContainer extends Component {
   }
 
   render() {
-    let stockPresent = Object.keys(this.state.stockData).length > 0; // TODO change this!!
-    if (this.state.doRedirect) {
+    let { doRedirect, loading, splash } = this.state;
+    if (doRedirect) {
       return <Redirect to="/logout" />;
     } else {
       return (
@@ -74,23 +79,30 @@ class AuthedContainer extends Component {
                 onSubmit={this.handleSearch}
                 onChange={this.handleChange}
               >
-                <input
-                  name="query"
-                  className="form-control"
-                  type="search"
-                  placeholder="Search example:GOOG"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-light" type="submit">
-                  Search
-                </button>
-                <button
-                  className="btn btn-outline-light"
-                  type="button"
-                  onClick={this.handleLogout}
-                >
-                  Logout
-                </button>
+                <div className="input-group">
+                  <input
+                    name="query"
+                    className="form-control"
+                    type="search"
+                    placeholder="Search example 'GOOG'"
+                    aria-label="Search"
+                  />
+                  <div className="input-group-append">
+                    <button
+                      className="btn btn-outline-light"
+                      type="submit"
+                    >
+                      Search
+                    </button>
+                  </div>
+                  <button
+                    className="btn btn-outline-light"
+                    type="button"
+                    onClick={this.handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
               </form>
             }
           </Navbar>
@@ -98,9 +110,9 @@ class AuthedContainer extends Component {
             {this.state.loading ? (
               <Loadscreen />
             ) : (
-              stockPresent && <StockProfile stock={this.state.stockData} />
+              !splash && <StockProfile stock={this.state.stockData} />
             )}
-            {!stockPresent && <Splash />}
+            {splash && <Splash />}
           </div>
         </div>
       );

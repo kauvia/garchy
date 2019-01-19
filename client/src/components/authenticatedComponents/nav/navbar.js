@@ -17,7 +17,7 @@ class Navbar extends Component {
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon" />
-        </button><h2 className="text-justify font-weight-bold text-uppercase">Stockify</h2>
+        </button><h2 className="d-none d-md-block text-justify font-weight-bold text-uppercase">Stockify</h2>
       {this.props.children}
       </nav>
     );

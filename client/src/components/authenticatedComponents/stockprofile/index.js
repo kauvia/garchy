@@ -18,7 +18,7 @@ class StockProfile extends Component {
   render() {
     console.log(this.props)
     return (
-      <div>
+      <div className="innerscreen" id="stock-profile-container">
         <div className="row">
           <div className="col">{this.props.stock.name}</div>
         </div>

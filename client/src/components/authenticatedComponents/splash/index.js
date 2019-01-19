@@ -17,9 +17,11 @@ class Splash extends Component {
   }
   render() {
     return (
-      <div>
-        <div className="row">
-          <div className="col">Splash</div>
+      <div className="innerscreen" id="user-profile-container">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col">Splashscreen aka user profile</div>
+          </div>
         </div>
       </div>
     );
