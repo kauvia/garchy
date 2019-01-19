@@ -9,7 +9,7 @@ class AuthedContainer extends Component {
     super(props);
     this.state = {
       query: "",
-      stockData: {},
+      stockData: { symbol: "" },
       doRedirect: false,
       currentLocation: ""
     };
@@ -30,24 +30,30 @@ class AuthedContainer extends Component {
   }
 
   handleSearch(e) {
-    fetch("/search", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
-        "validate-only": false,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.state)
-    }).then(res =>
-      res.json().then(res => {
-        if (res.success === true) {
-          this.setState({stockData:res.stockdata})
-          console.log("successly got stock info");
-          console.log(this.state)
-        }
-      })
-    );
+    if (
+      this.state.stockData.symbol.toLowerCase() !=
+      this.state.query.toLowerCase()
+    ) {
+      console.log("sending request");
+      fetch("/search", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
+          "validate-only": false,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(this.state)
+      }).then(res =>
+        res.json().then(res => {
+          if (res.success === true) {
+            this.setState({ stockData: res.stockdata });
+            console.log("successly got stock info");
+            console.log(this.state);
+          }
+        })
+      );
+    }
     e.preventDefault();
   }
 
@@ -86,7 +92,6 @@ class AuthedContainer extends Component {
             }
           </Navbar>
           <div className="container-fluid">
-          
             {stockPresent && <StockProfile stock={this.state.stockData} />}
             {!stockPresent && <Splash />}
           </div>

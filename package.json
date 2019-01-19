@@ -29,7 +29,9 @@
     "jsonwebtoken": "^8.4.0",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.42.0"
+    "sentiment": "^5.0.1",
+    "sequelize": "^4.42.0",
+    "twit": "^2.2.11"
   },
   "devDependencies": {}
 }

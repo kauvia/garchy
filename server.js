@@ -16,51 +16,94 @@ routes(app);
 http.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-
+/////                 TESTING AND PRE-PROD SETUP          //////
 const axios = require("axios");
 const fs = require("fs");
 const jsonfile = require("jsonfile");
 const stockArr = { stocks: [] };
+const Twit = require("twit");
+const {
+  consumerKeyT,
+  consumerSecretT,
+  accessTokenT,
+  accessSecretT
+} = require("./server/config/config");
+const Sentiment = require("sentiment");
 
-const getStockInfo = () => {
-  axios.get("https://api.iextrading.com/1.0/ref-data/symbols").then(val => {
-    val.data.map(stock => {
-      if (stock.type == "cs" && stock.isEnabled) {
-        stockArr.stocks.push(stock);
-      }
-    });
-    console.log(stockArr.stocks.length);
-  });
-};
+let T = new Twit({
+  consumer_key: consumerKeyT,
+  consumer_secret: consumerSecretT,
+  access_token: accessTokenT,
+  access_token_secret: accessSecretT
+});
 
-//getStockInfo();
-
-const writeStockInfo = () => {
-  jsonfile.readFile("stocks.json", (err, data) => {
-    jsonfile.writeFile("stocks.json", stockArr).then(res => {
-      console.log("finished writing");
-      jsonfile.readFile("stocks.json", (err, data) => {
-        console.log(data.length);
+const getSentiments = query => {
+  T.get(
+    "search/tweets",
+    { q: query, count: 100, result_type: "popular" },
+    (err, data, res) => {
+      let tweets = data.statuses;
+      let tweetsTextArr = [];
+      tweets.map(item => {
+        tweetsTextArr.push(item.text);
       });
-    });
-  });
+
+      let sentimentResults = [];
+      tweetsTextArr.map(txt => {
+        let S = new Sentiment();
+        console.log(txt);
+        let result = S.analyze(txt);
+        if (result.score != 0) {
+          sentimentResults.push(result.comparative);
+        }
+      });
+      // console.log(sentimentResults);
+      let averageScore = 0;
+      for (let i = sentimentResults.length - 1; i >= 0; i--) {
+        averageScore += sentimentResults[i];
+        if (i == 0) {
+          averageScore = averageScore / sentimentResults.length;
+        }
+      }
+      console.log(averageScore, " average score");
+    }
+  );
 };
 
-const {Stocks} =require("./server/controllers");
-const runUpload = ()=>{
-  console.log('uploading')
-  jsonfile.readFile("stocks.json",(err,data)=>{
-    let stockArr = data.stocks;
-    console.log(stockArr.length)
-  //  Stocks.uploadStocks(stockArr)  //JUST IN CASE
-  })
-}
+// const getStockInfo = () => {
+//   axios.get("https://api.iextrading.com/1.0/ref-data/symbols").then(val => {
+//     val.data.map(stock => {
+//       if (stock.type == "cs" && stock.isEnabled) {
+//         stockArr.stocks.push(stock);
+//       }
+//     });
+//     console.log(stockArr.stocks.length);
+//   });
+// };
 
-const seeStocks = ()=>{
-  console.log('seeing all stocks')
-}
+// getStockInfo();
 
-//seeStocks();
+// const writeStockInfo = () => {
+//   jsonfile.readFile("stocks.json", (err, data) => {
+//     jsonfile.writeFile("stocks.json", stockArr).then(res => {
+//       console.log("finished writing");
+//       jsonfile.readFile("stocks.json", (err, data) => {
+//         console.log(data.length);
+//       });
+//     });
+//   });
+// };
+
+// const { Stocks } = require("./server/controllers");
+// const runUpload = () => {
+//   console.log("uploading");
+//   jsonfile.readFile("stocks.json", (err, data) => {
+//     let stockArr = data.stocks;
+//     console.log(stockArr.length);
+//       Stocks.uploadStocks(stockArr)  //JUST IN CASE
+//   });
+// };
+
 //runUpload()                //DONT RUN UNLESS STOCKDATABASE IS EMPTY
 // jsonfile.readFile("stocks.json",(err,obj)=>{
 //   console.log(obj.stocks.length);
@@ -74,7 +117,6 @@ const seeStocks = ()=>{
 //     });console.log('searching')
 //   });console.log('end of search')
 // })
-
 
 // const makeOCPURequest = (req, res) => {
 //   console.log(req.body);
