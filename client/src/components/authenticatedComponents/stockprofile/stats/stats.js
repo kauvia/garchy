@@ -21,7 +21,7 @@ class Stats extends Component {
   }
   handleSubmit() {}
   render() {
-    let { CEO, description, financials, sector, tags } = this.props.data;
+    let { CEO, description, financials, sector } = this.props.data;
     return (
       <div>
         {this.state.toggleFinancials ? (

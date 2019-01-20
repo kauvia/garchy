@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
 import { Chart } from "./chart";
 import { Sentiment } from "./sentiment";

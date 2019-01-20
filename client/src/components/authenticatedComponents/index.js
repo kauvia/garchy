@@ -98,7 +98,7 @@ class AuthedContainer extends Component {
   }
 
   render() {
-    let { doRedirect, loading, splash } = this.state;
+    let { doRedirect, splash } = this.state;
     if (doRedirect) {
       return <Redirect to="/logout" />;
     } else {
