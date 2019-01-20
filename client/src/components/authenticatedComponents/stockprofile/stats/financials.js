@@ -12,13 +12,15 @@ class Financials extends Component {
   handleSubmit() {}
   render() {
     let data = this.props.data[0];
-    Object.keys(data).map(item => {
-      console.log(data.item);
-    });
+
     return (
       <div>
         {Object.keys(data).map(item => {
-          return <div key={item}>{item} : {data[item]}</div>
+          return (
+            <div key={item}>
+              {item} : {data[item]}
+            </div>
+          );
         })}
       </div>
     );

@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 
-
+import ChartCanvas from "./components/authenticatedComponents/stockprofile/chart/chartcanvas"
 import Landing from "./components/landing";
 import AuthedContainer from "./components/authenticatedComponents";
 import Particles from "./particles";
@@ -50,6 +50,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/login" component={Landing} />
           <Route exact path="/logout" component={Landing} />
+          <Route path="/test" render={props => <ChartCanvas {...props} />} />
           <Route path="/" render={props => <AuthedContainer {...props} />} />
         </Switch>
       </div>
