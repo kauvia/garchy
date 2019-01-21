@@ -42,6 +42,10 @@ class Users {
   static updateOne(req, res) {}
   static deleteOne(req, res) {}
 
+  static addStock(req,res){
+    console.log(req)
+  }
+
   static login(req, res) {
     let username = req.body.username;
     let password = req.body.password;

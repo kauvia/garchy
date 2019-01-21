@@ -6,7 +6,7 @@ class ChartCanvas extends Component {
     this.state = {
       data: null,
       forecastdata: null,
-      forecastArr:[],
+      forecastArr: [],
       barsArr: [],
       monthsArr: [],
       canvasHeight: 500,
@@ -104,7 +104,7 @@ class ChartCanvas extends Component {
       maxY,
       userX,
       userY,
-      forecastArr,
+      forecastArr
     } = this.state;
     this.zoomPan();
     this.rAF = requestAnimationFrame(this.updateAnimationState);
@@ -186,7 +186,7 @@ class ChartCanvas extends Component {
     this.setState({
       barsArr: tempArr,
       monthsArr: dateArr,
-      userX: -count-30 + this.state.canvasWidth / this.state.xMult
+      userX: -count - 30 + this.state.canvasWidth / this.state.xMult
     });
     //   console.log(dateArr);
 
@@ -194,7 +194,7 @@ class ChartCanvas extends Component {
   }
   setupForecasts() {
     let forecastPosX = this.state.barsArr[this.state.barsArr.length - 1].posX;
-  //  let forecastLength = this.state.forecastdata.length;
+    //  let forecastLength = this.state.forecastdata.length;
     let trajectories = this.state.forecastdata[0].length;
     let tempArr = [];
     this.state.forecastdata.map(val => {
@@ -221,13 +221,35 @@ class ChartCanvas extends Component {
         posX: forecastPosX
       });
     });
-    this.setState({forecastArr:tempArr})
+    this.setState({ forecastArr: tempArr });
     console.log(tempArr);
   }
   drawForecast(c, xMult, yMult, arr, cH, cW, baseY, userX, userY) {
-    arr.map(val=>{
-      console.log(val)
-    })
+    arr.map(val => {
+      //     console.log(val)
+      c.beginPath();
+      c.moveTo(
+        userX * xMult + val.posX * xMult,
+        userY * yMult + cH - val.low * yMult - this.state.baseY * yMult
+      );
+      c.lineTo(
+        userX * xMult + val.posX * xMult,
+        userY * yMult + cH - val.high * yMult - baseY * yMult
+      );
+      c.stroke();
+      let startY=val.average+val.high;
+      startY /=2;
+      let widthY = val.high-val.low;
+      widthY /=2;
+      c.rect(
+        userX * xMult + val.posX * xMult - xMult / 4,
+        userY * yMult + cH - startY* yMult - baseY * yMult,
+        xMult*.5,
+        Math.abs(widthY * yMult)
+      );
+      c.fillStyle ="antiquewhite";
+      c.fill();
+    });
   }
   drawBars(c, xMult, yMult, arr, cH, cW, baseY, userX, userY) {
     //   console.log(userX)

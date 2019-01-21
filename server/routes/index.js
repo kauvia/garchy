@@ -9,5 +9,5 @@ module.exports = app => {
   app.get("/validate",checkToken)
 
   app.post("/search",checkToken,Stocks.getOne)
-  
+  app.post("/watchlist/add",checkToken,Users.addStock)
 };

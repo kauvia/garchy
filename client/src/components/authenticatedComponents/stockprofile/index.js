@@ -14,7 +14,17 @@ class StockProfile extends Component {
   }
   componentDidMount() {}
   handleWatchedButton(){
-    console.log('adding to favs')
+   fetch("/watchlist/add",{
+     method:"POST",
+     mode: "cors",
+     headers:{
+      "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
+      "validate-only": true
+     },
+     body: {symbol:this.props.stock.symbol}
+   }).then(
+     res=>console.log(res)
+   )
   }
   render() {
     //   console.log(this.props);
