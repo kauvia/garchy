@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     User.belongsToMany(models.Stock,{
       through: models.Watchlist,
-      as:'user',    })
+      foreignKey: "user_id",
+      sourceKey:"symbol"
+   })
   };
   return User;
 };

@@ -8,24 +8,25 @@ class StockProfile extends Component {
   constructor(props) {
     super(props);
 
- //   this.handleChange = this.handleChange.bind(this);
- //   this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleWatchedButton =this.handleWatchedButton.bind(this)
+    //   this.handleChange = this.handleChange.bind(this);
+    //   this.handleSubmit = this.handleSubmit.bind(this);
+ //   this.handleWatchedButton = this.handleWatchedButton.bind(this);
   }
   componentDidMount() {}
-  handleWatchedButton(){
-   fetch("/watchlist/add",{
-     method:"POST",
-     mode: "cors",
-     headers:{
-      "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
-      "validate-only": true
-     },
-     body: {symbol:this.props.stock.symbol}
-   }).then(
-     res=>console.log(res)
-   )
-  }
+  // handleWatchedButton() {            NOT WORKING!! HAVE TO REDO DB TO FIX!
+  //   console.log(this.props.stock.symbol);
+  //   fetch("/watchlist/add", {
+  //     method: "POST",
+  //     mode: "cors",
+  //     headers: {
+  //       "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
+  //       "validate-only": false,
+  //       "Content-Type": "application/json"
+   
+  //     },
+  //     body: JSON.stringify ({ symbol:this.props.stock.symbol })
+  //   });
+  // }
   render() {
     //   console.log(this.props);
     return (
@@ -43,7 +44,7 @@ class StockProfile extends Component {
                   className="btn btn-outline-light align-center"
                   onClick={this.handleWatchedButton}
                   type="button"
-                  style={{ height: "50%", fontSize: "10px",marginLeft:"5px" }}
+                  style={{ height: "50%", fontSize: "10px", marginLeft: "5px" }}
                 >
                   Add to Watchlist
                 </button>
@@ -56,7 +57,7 @@ class StockProfile extends Component {
           </div>
           <div className="row">
             <div className="col-6">
-              <Chart data={this.props.stock.symbol} />
+              <Chart data={this.props.stock} />
             </div>
             <div className="col-6">
               <div className="container-fluid">

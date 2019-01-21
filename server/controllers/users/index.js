@@ -1,7 +1,7 @@
 const model = require("../../models");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const { User } = model;
+const { User, Stock } = model;
 
 const jwt = require("jsonwebtoken");
 const { secret } = require("../../config/config");
@@ -42,8 +42,14 @@ class Users {
   static updateOne(req, res) {}
   static deleteOne(req, res) {}
 
-  static addStock(req,res){
-    console.log(req)
+  static addStock(req, res) {
+    console.log(req.decoded, req.body);
+    let symb = req.body.symbol;
+    let user = req.decoded.username;
+    console.log(symb, user);
+    return User.findAll({ include: [{ model: Stock }] }).then(user => {
+      console.log(user);
+    });
   }
 
   static login(req, res) {

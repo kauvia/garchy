@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   Stock.associate = function(models) {
     Stock.belongsToMany(models.User,{
       through: models.Watchlist,
-      as:'stock',
+      foreignKey: "symbol",
+      targetKey: "symbol"
     })  };
   return Stock;
 };

@@ -247,7 +247,7 @@ class ChartCanvas extends Component {
         xMult*.5,
         Math.abs(widthY * yMult)
       );
-      c.fillStyle ="antiquewhite";
+      c.fillStyle ="blue";
       c.fill();
     });
   }
@@ -331,13 +331,15 @@ class ChartCanvas extends Component {
   handleChange() {}
   handleSubmit() {}
   getChartInfo() {
+    console.log(this.props.data)
+
     fetch(
-      `https://api.iextrading.com/1.0/stock/${this.props.data}/chart/5y`
+      `https://api.iextrading.com/1.0/stock/${this.props.data.symbol}/chart/5y`
     ).then(val =>
       val.json().then(data => {
         //      this.setState({ data: data });
         // this.setupBars();
-        fetch(`http://localhost/ocpu/tmp/x0344fe830a225e/R/.val/`).then(val => {
+        fetch(this.props.data.forecastURL).then(val => {
           val.json().then(forecast => {
             this.setState({ forecastdata: forecast, data: data });
             this.setupBars();

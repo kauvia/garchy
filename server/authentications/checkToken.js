@@ -3,6 +3,7 @@ const { secret } = require("../config/config");
 
 const checkToken = (req, res, next) => {
   console.log("checking token");
+ // console.log(req.body)
   let validateOnly = req.headers["validate-only"];
   let token = req.headers["x-access-token"] || req.headers["authorization"];
   if (token.startsWith("Bearer ")) {
@@ -19,6 +20,7 @@ const checkToken = (req, res, next) => {
           res.json({ success: true, message: "Token is valid" });
         } else {
           req.decoded = decoded;
+    //      console.log(req)
           next();
         }
       }
