@@ -9,7 +9,9 @@ class Chart extends Component {
   }
 //this.props.data = chartURL
   handleChange() {}
-  handleSubmit() {}
+  handleSubmit() {
+    
+  }  
   render() {
     console.log(this.props)
     return <div><ChartCanvas data={this.props.data}/></div>;

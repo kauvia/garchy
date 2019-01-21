@@ -4,6 +4,7 @@ gbmgarch <- function(ticker){
   require("rugarch");
   require("Sim.DiffProc");
   require("timetk");
+  require("jsonlite")
  stockdata <- quantmoddata(ticker);
   stockdata <- stockdata[,1];
   forecastlength <- 1:1;

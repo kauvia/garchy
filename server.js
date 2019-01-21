@@ -114,7 +114,7 @@ const getForcast = (symb) => {
   then(val=> {
     let tempArr = val.data.split(/\n/);
     tempArr = tempArr[0].split('/');
-    let o
+    let ocpuURL = `http://localhost/ocpu/tmp/${tempArr[3]}/R/.val`;
   })
 }
 

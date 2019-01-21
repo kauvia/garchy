@@ -5,6 +5,8 @@ class ChartCanvas extends Component {
     super(props);
     this.state = {
       data: null,
+      forecastdata: null,
+      forecastArr:[],
       barsArr: [],
       monthsArr: [],
       canvasHeight: 500,
@@ -30,21 +32,24 @@ class ChartCanvas extends Component {
   componentWillUnmount() {
     console.log("cancelling animation frage");
     cancelAnimationFrame(this.rAF);
-    window.removeEventListener('resize',this.updateDimensions)
+    window.removeEventListener("resize", this.updateDimensions);
   }
   componentDidMount() {
     this.getChartInfo();
     //   const c = canvas.getContext("2d");
     this.rAF = requestAnimationFrame(this.updateAnimationState);
     this.updateDimensions();
-    window.addEventListener('resize',this.updateDimensions)
+    window.addEventListener("resize", this.updateDimensions);
   }
-  updateDimensions(){
-    console.log(window.innerWidth,window.innerHeight);
-    this.setState({canvasHeight:window.innerHeight*.75,canvasWidth:window.innerWidth*.4})
+  updateDimensions() {
+    console.log(window.innerWidth, window.innerHeight);
+    this.setState({
+      canvasHeight: Math.round(window.innerHeight * 0.75),
+      canvasWidth: Math.round(window.innerWidth * 0.4)
+    });
   }
   mouseControl(e) {
- //   console.log(this.props)
+    //   console.log(this.props)
 
     // console.log('downing mouse',e.clientX,e.clientY,e.button,e.type)
     e.preventDefault();
@@ -98,7 +103,8 @@ class ChartCanvas extends Component {
       baseY,
       maxY,
       userX,
-      userY
+      userY,
+      forecastArr,
     } = this.state;
     this.zoomPan();
     this.rAF = requestAnimationFrame(this.updateAnimationState);
@@ -127,6 +133,17 @@ class ChartCanvas extends Component {
       userY,
       userX
     );
+    this.drawForecast(
+      c,
+      xMult,
+      yMult,
+      forecastArr,
+      canvasHeight,
+      canvasWidth,
+      baseY,
+      userX,
+      userY
+    );
   }
   zoomPan(minY, maxY) {
     if (minY) {
@@ -151,9 +168,8 @@ class ChartCanvas extends Component {
       let s = val.date.split("-");
       if (tempDate !== s[0] + "-" + s[1]) {
         tempDate = s[0] + "-" + s[1];
-        dateArr.push({ date: tempDate, posX: count,dateCount:tempDateCount });
-     //   tempDateCount;
-
+        dateArr.push({ date: tempDate, posX: count, dateCount: tempDateCount });
+        //   tempDateCount;
       }
 
       count++; // use count for no gaps, date for gaps
@@ -170,11 +186,48 @@ class ChartCanvas extends Component {
     this.setState({
       barsArr: tempArr,
       monthsArr: dateArr,
-      userX: -count + this.state.canvasWidth / this.state.xMult
+      userX: -count-30 + this.state.canvasWidth / this.state.xMult
     });
- //   console.log(dateArr);
+    //   console.log(dateArr);
 
     // console.log(this.state.userX*this.state.xMult)
+  }
+  setupForecasts() {
+    let forecastPosX = this.state.barsArr[this.state.barsArr.length - 1].posX;
+  //  let forecastLength = this.state.forecastdata.length;
+    let trajectories = this.state.forecastdata[0].length;
+    let tempArr = [];
+    this.state.forecastdata.map(val => {
+      forecastPosX++;
+      let high = 0;
+      let low = 100000000;
+      let average = 0;
+      for (let i = 0; i < val.length; i++) {
+        if (i !== 0) {
+          let item = parseFloat(val[i]);
+          average += item;
+          if (item > high) {
+            high = item;
+          }
+          if (item < low) {
+            low = item;
+          }
+        }
+      }
+      tempArr.push({
+        high: high,
+        low: low,
+        average: average / trajectories,
+        posX: forecastPosX
+      });
+    });
+    this.setState({forecastArr:tempArr})
+    console.log(tempArr);
+  }
+  drawForecast(c, xMult, yMult, arr, cH, cW, baseY, userX, userY) {
+    arr.map(val=>{
+      console.log(val)
+    })
   }
   drawBars(c, xMult, yMult, arr, cH, cW, baseY, userX, userY) {
     //   console.log(userX)
@@ -233,26 +286,42 @@ class ChartCanvas extends Component {
     }
 
     if (this.state.monthsArr.length > 0) {
-      let numMonths=this.state.monthsArr.length
-      for (let i = 0;i<numMonths ; i++) {
+      let numMonths = this.state.monthsArr.length;
+      for (let i = 0; i < numMonths; i++) {
         c.beginPath();
-        c.moveTo( this.state.monthsArr[i].dateCount * xMult + userX * xMult, 0);
-        c.lineTo( this.state.monthsArr[i].dateCount   * xMult + userX * xMult, cH);
+        c.moveTo(this.state.monthsArr[i].dateCount * xMult + userX * xMult, 0);
+        c.lineTo(this.state.monthsArr[i].dateCount * xMult + userX * xMult, cH);
         c.stroke();
-        c.setTransform(1,0,0,1,this.state.monthsArr[i].dateCount *xMult +userX*xMult+5,5);
-        c.rotate(Math.PI/2);
-        c.strokeText(`${this.state.monthsArr[i].date}`,0,0);
-        c.setTransform(1,0,0,1,0,0)
+        c.setTransform(
+          1,
+          0,
+          0,
+          1,
+          this.state.monthsArr[i].dateCount * xMult + userX * xMult + 5,
+          5
+        );
+        c.rotate(Math.PI / 2);
+        c.strokeText(`${this.state.monthsArr[i].date}`, 0, 0);
+        c.setTransform(1, 0, 0, 1, 0, 0);
       }
     }
   }
   handleChange() {}
   handleSubmit() {}
   getChartInfo() {
-    fetch(`https://api.iextrading.com/1.0/stock/${this.props.data}/chart/5y`).then(val =>
-      val.json().then(val => {
-        this.setState({ data: val });
-        this.setupBars();
+    fetch(
+      `https://api.iextrading.com/1.0/stock/${this.props.data}/chart/5y`
+    ).then(val =>
+      val.json().then(data => {
+        //      this.setState({ data: data });
+        // this.setupBars();
+        fetch(`http://localhost/ocpu/tmp/x0344fe830a225e/R/.val/`).then(val => {
+          val.json().then(forecast => {
+            this.setState({ forecastdata: forecast, data: data });
+            this.setupBars();
+            this.setupForecasts();
+          });
+        });
       })
     );
   }
@@ -268,7 +337,10 @@ class ChartCanvas extends Component {
           onMouseMove={this.mouseControl}
           onMouseUp={this.mouseControl}
           onWheel={this.mouseControl}
-          style={{width:`${this.state.canvasWidth}px`,height:`${this.state.canvasHeight}px`}}
+          style={{
+            width: `${this.state.canvasWidth}px`,
+            height: `${this.state.canvasHeight}px`
+          }}
         />
       </div>
     );
