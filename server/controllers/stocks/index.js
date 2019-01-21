@@ -45,7 +45,7 @@ class Stocks {
 
             //Sentiments
 
-            stockData.sentiments ={twitter:0.200} //dummy?
+            stockData.sentiments ={twitter:0.200, google: 0.08} //dummy?
 
             //the rest
 

@@ -14,13 +14,15 @@ class Financials extends Component {
     let data = this.props.data[0];
 
     return (
-      <div>
+      <div><h5>Financials</h5>
         {Object.keys(data).map(item => {
-          return (
-            <div key={item}>
-              {item} : {data[item]}
-            </div>
-          );
+          if (data[item]) {
+            return (
+              <div key={item}>
+                {item} : {data[item]}
+              </div>
+            );
+          }
         })}
       </div>
     );

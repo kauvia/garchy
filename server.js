@@ -26,7 +26,8 @@ const {
   consumerKeyT,
   consumerSecretT,
   accessTokenT,
-  accessSecretT
+  accessSecretT,
+  googleAPI
 } = require("./server/config/config");
 const Sentiment = require("sentiment");
 
@@ -37,7 +38,7 @@ let T = new Twit({
   access_token_secret: accessSecretT
 });
 
-const getSentiments = query => {
+const getTwitterSentiments = query => {
   T.get(
     "search/tweets",
     { q: query, count: 100, result_type: "popular" },
@@ -51,7 +52,7 @@ const getSentiments = query => {
       let sentimentResults = [];
       tweetsTextArr.map(txt => {
         let S = new Sentiment();
-        console.log(txt);
+   //     console.log(txt);
         let result = S.analyze(txt);
         if (result.score != 0) {
           sentimentResults.push(result.comparative);
@@ -65,11 +66,48 @@ const getSentiments = query => {
           averageScore = averageScore / sentimentResults.length;
         }
       }
-      console.log(averageScore, " average score");
+      console.log(averageScore, " twitter average score");
     }
   );
 };
 
+const getGoogleSentiments = query => {
+  let newsArr = [];
+  let sentimentsResults = [];
+  axios
+    .get(`https://newsapi.org/v2/everything?q=${query}&apiKey=${googleAPI}`)
+    .then(val => {
+      console.log(val.data)
+      val.data.articles.map(item => {
+        if(item.description){
+        newsArr.push(item.description)}
+        else if (item.content){
+          newsArr.push(item.content)
+        } else if (item.title){
+          newsArr.push(item.title)
+        } else {newsArr.push("John")};  //neutral keyword
+      });
+      newsArr.map(txt => {
+        let S = new Sentiment();
+     //   console.log(txt);
+        let result = S.analyze(txt);
+        if (result.score != 0) {
+          sentimentsResults.push(result.comparative);
+        }
+      });
+      let averageScore = 0;
+      for (let i = sentimentsResults.length-1;i>=0;i--){
+        averageScore+=sentimentsResults[i];
+        if (i==0){
+          averageScore=averageScore/sentimentsResults.length
+        }
+      }
+      console.log(averageScore," google news average score")
+    });
+
+};
+//  getGoogleSentiments("GE");
+//  getTwitterSentiments("GE");
 // const getStockInfo = () => {
 //   axios.get("https://api.iextrading.com/1.0/ref-data/symbols").then(val => {
 //     val.data.map(stock => {

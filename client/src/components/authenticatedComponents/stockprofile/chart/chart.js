@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ChartCanvas from "./chartcanvas";
 
 class Chart extends Component {
   constructor(props) {
@@ -10,7 +11,8 @@ class Chart extends Component {
   handleChange() {}
   handleSubmit() {}
   render() {
-    return <div><img src={this.props.data} alt="chart" style={{width:'100%'}}/></div>;
+    console.log(this.props)
+    return <div><ChartCanvas data={this.props.data}/></div>;
   }
 }
 

@@ -22,7 +22,7 @@ class AuthedContainer extends Component {
     let lastVisitedStock = localStorage.getItem("symbol");
     if (lastVisitedStock) {
       this.setState({ query: lastVisitedStock });
-      console.log(this.state,lastVisitedStock)
+ //     console.log(this.state,lastVisitedStock)
       fetch("/search", {
         method: "POST",
         mode: "cors",

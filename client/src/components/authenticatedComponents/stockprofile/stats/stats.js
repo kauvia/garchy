@@ -23,14 +23,14 @@ class Stats extends Component {
   render() {
     let { CEO, description, financials, sector } = this.props.data;
     return (
-      <div>
+      <div id="company-stats">
         {this.state.toggleFinancials ? (
           <div onClick={this.handleChange}>
             <Financials data={financials} />
           </div>
         ) : (
           <div onClick={this.handleChange}>
-            <div>Company Profile</div>
+            <h3>Company Profile</h3>
             <div>CEO:{CEO}</div>
             <div>Sector:{sector}</div>
             <div>Description:{description}</div>

@@ -7,8 +7,8 @@ class ChartCanvas extends Component {
       data: null,
       barsArr: [],
       monthsArr: [],
-      canvasHeight: 600,
-      canvasWidth: 600,
+      canvasHeight: 500,
+      canvasWidth: 500,
       xMult: 5,
       yMult: 1,
       baseY: 0,
@@ -25,17 +25,27 @@ class ChartCanvas extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.mouseControl = this.mouseControl.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
   }
   componentWillUnmount() {
     console.log("cancelling animation frage");
     cancelAnimationFrame(this.rAF);
+    window.removeEventListener('resize',this.updateDimensions)
   }
   componentDidMount() {
     this.getChartInfo();
     //   const c = canvas.getContext("2d");
     this.rAF = requestAnimationFrame(this.updateAnimationState);
+    this.updateDimensions();
+    window.addEventListener('resize',this.updateDimensions)
+  }
+  updateDimensions(){
+    console.log(window.innerWidth,window.innerHeight);
+    this.setState({canvasHeight:window.innerHeight*.75,canvasWidth:window.innerWidth*.4})
   }
   mouseControl(e) {
+ //   console.log(this.props)
+
     // console.log('downing mouse',e.clientX,e.clientY,e.button,e.type)
     e.preventDefault();
     let { down, initX, userX, initY, userY, xMult, yMult } = this.state;
@@ -162,7 +172,7 @@ class ChartCanvas extends Component {
       monthsArr: dateArr,
       userX: -count + this.state.canvasWidth / this.state.xMult
     });
-    console.log(dateArr);
+ //   console.log(dateArr);
 
     // console.log(this.state.userX*this.state.xMult)
   }
@@ -239,7 +249,7 @@ class ChartCanvas extends Component {
   handleChange() {}
   handleSubmit() {}
   getChartInfo() {
-    fetch("https://api.iextrading.com/1.0/stock/goog/chart/5y").then(val =>
+    fetch(`https://api.iextrading.com/1.0/stock/${this.props.data}/chart/5y`).then(val =>
       val.json().then(val => {
         this.setState({ data: val });
         this.setupBars();
@@ -258,6 +268,7 @@ class ChartCanvas extends Component {
           onMouseMove={this.mouseControl}
           onMouseUp={this.mouseControl}
           onWheel={this.mouseControl}
+          style={{width:`${this.state.canvasWidth}px`,height:`${this.state.canvasHeight}px`}}
         />
       </div>
     );
