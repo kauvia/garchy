@@ -108,6 +108,19 @@ const getGoogleSentiments = query => {
 };
 //  getGoogleSentiments("GE");
 //  getTwitterSentiments("GE");
+
+const getForcast = (symb) => {
+  axios.post(`https://api.iextrading.com/1.0/stock/${symb}/financials`),
+  then(val=> {
+    let tempArr = val.data.split(/\n/);
+    tempArr = tempArr[0].split('/');
+    let o
+  })
+}
+
+
+
+
 // const getStockInfo = () => {
 //   axios.get("https://api.iextrading.com/1.0/ref-data/symbols").then(val => {
 //     val.data.map(stock => {

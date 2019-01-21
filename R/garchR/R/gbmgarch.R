@@ -44,8 +44,11 @@ for (i in trajectories){
 
   #  stockdata <- c(stockdata, xts(as.integer(gbm[2]),end(stockdata)+1));
   #};
-  plots = plot(tail(stockdataforecast,395),main = "30-days forecast")
-  return(plots)
+  #plots = plot(tail(stockdataforecast,395),main = "30-days forecast")
+  day30s <- tail(stockdataforecast,30)
+  jsonFormat <- data.frame(time=time(day30s),values=day30s)
+  jsonFormat <- toJSON(as.matrix(jsonFormat))
+  return(jsonFormat)
 }
 returns <- function(prices){
   rets <- dailyReturn(prices)
