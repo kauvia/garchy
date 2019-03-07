@@ -1,3 +1,5 @@
 node_modules
 .Rproj.user
 R/garchR_0.1.0.tar.gz
+server/config/config.js
+server/config/config.json
