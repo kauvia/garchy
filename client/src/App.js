@@ -24,6 +24,8 @@ class App extends Component {
       this.setState({ isLoggedIn: true });
       this.setState({ token: localStorage.getItem("token") });
 
+      this.setState( {})
+
       fetch("/validate", {
         method: "GET",
         headers: {
@@ -46,7 +48,6 @@ class App extends Component {
     return (
       <div>
         <Particles />
-
         <Switch>
           <Route exact path="/login" component={Landing} />
           <Route exact path="/logout" component={Landing} />

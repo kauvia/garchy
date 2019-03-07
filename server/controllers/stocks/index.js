@@ -1,6 +1,6 @@
 const axios = require("axios");
 const model = require("../../models");
-const api = require("./apis");
+
 const Twit = require("twit");
 const {
   consumerKeyT,
@@ -119,10 +119,6 @@ class Stocks {
                 googleAveScore=googleAveScore/googleSentimentResults.length
               }
             }
-
-            console.log(googleAveScore, " goog average score");
-
-
             stockData.sentiments = { twitter: twitterAveScore, google: googleAveScore }; //dummy?
 
             //the rest
