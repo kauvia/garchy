@@ -26,7 +26,7 @@ class App extends Component {
 
       this.setState( {})
 
-      fetch("/validate", {
+      fetch("http://localhost:3001/validate", {
         method: "GET",
         headers: {
           "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,

@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const http = require("http").Server(app);
 const bodyParser = require("body-parser");
@@ -8,6 +9,8 @@ const hostname = "127.0.0.1";
 const port = 3001;
 
 // Parse incoming requests data
+app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
