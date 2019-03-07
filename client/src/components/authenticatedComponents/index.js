@@ -23,7 +23,7 @@ class AuthedContainer extends Component {
     if (lastVisitedStock) {
       this.setState({ query: lastVisitedStock });
  //     console.log(this.state,lastVisitedStock)
-      fetch("http://localhost:3001/search", {
+      fetch("http://localhost:3011/search", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -67,7 +67,7 @@ class AuthedContainer extends Component {
       ) {
              console.log("sending request");
         this.setState({ loading: true });
-        fetch("http://localhost:3001/search", {
+        fetch("http://localhost:3011/search", {
           method: "POST",
           mode: "cors",
           headers: {

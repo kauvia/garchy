@@ -39,7 +39,7 @@ class Landing extends Component {
     e.preventDefault();
   }
   dbCreateUser() {
-    fetch("http://localhost:3001/users/new", {
+    fetch("http://localhost:3011/users/new", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -59,7 +59,7 @@ class Landing extends Component {
     );
   }
   dbLogIn() {
-    fetch("http://localhost:3001/login", {
+    fetch("http://localhost:3011/login", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -82,7 +82,7 @@ class Landing extends Component {
   componentDidMount() {
     if (localStorage.length > 0) {
       console.log("fetching");
-      fetch("http://localhost:3001/validate", {
+      fetch("http://localhost:3011/validate", {
         method: "GET",
         headers: {
           "X-Access-Token": `Bearer ${localStorage.getItem("token")}`,
