@@ -24,8 +24,6 @@ class App extends Component {
       this.setState({ isLoggedIn: true });
       this.setState({ token: localStorage.getItem("token") });
 
-      this.setState( {})
-
       fetch("http://localhost:3011/validate", {
         method: "GET",
         headers: {
